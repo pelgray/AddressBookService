@@ -1,0 +1,8 @@
+#IDE
+.idea/
+.gradle/
+gradle/
+*/gradlew
+
+#Java
+build/
