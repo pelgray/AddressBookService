@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/clients")
 public class ClientController {
     private static final Logger LOG = LoggerFactory.getLogger(ClientController.class);
 
@@ -29,7 +31,7 @@ public class ClientController {
      * @param query фильтр, необязательный параметр. Если указан, то возвращаемый список будет состоять
      *              из {@link ClientEntity}, в поле {@code name} которых присутствует указанное значение
      */
-    @GetMapping("/clients")
+    @GetMapping
     List<ClientEntity> getClients(@RequestParam(required = false) String query) {
         LOG.debug("getClients: query={}", query);
         return query == null ? clientService.findAll() : clientService.findAllBySubstringInName(query);
@@ -38,7 +40,7 @@ public class ClientController {
     /**
      * Добавление нового Client
      */
-    @PostMapping("/clients")
+    @PostMapping
     void addClient(@RequestBody ClientEntity newClient) {
         LOG.debug("addClient: {}", newClient.toString());
         clientService.add(newClient);
@@ -49,7 +51,7 @@ public class ClientController {
      *
      * @param id идентификатор удаляемого {@link ClientEntity}
      */
-    @DeleteMapping("/clients/{id}")
+    @DeleteMapping("/{id}")
     void removeClient(@PathVariable Integer id) {
         LOG.debug("removeClient: id={}", id);
         clientService.remove(id);
@@ -60,9 +62,9 @@ public class ClientController {
      *
      * @param clientId идентификатор {@link ClientEntity}
      */
-    @GetMapping("/clients/{clientId}/addresses")
+    @GetMapping("/{clientId}/addresses")
     List<AddressEntity> getAddressesByClientId(@PathVariable Integer clientId) {
         LOG.debug("getAddressesByClientId: id={}", clientId);
-        return clientService.findById(clientId).getAddresses();
+        return clientService.find(clientId).getAddresses();
     }
 }

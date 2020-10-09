@@ -51,6 +51,7 @@ public class ClientEntity implements Serializable {
     }
 
     public void setAddresses(List<AddressEntity> addresses) {
+        addresses.forEach(addressEntity -> addressEntity.setClient(this));
         this.addresses = addresses;
     }
 

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/addresses")
 public class AddressController {
     private static final Logger LOG = LoggerFactory.getLogger(AddressController.class);
 
@@ -21,7 +23,7 @@ public class AddressController {
     /**
      * Добавление нового Address для заданного id Client
      */
-    @PostMapping("/addresses")
+    @PostMapping
     void addAddress(@RequestBody AddressEntity newAddress) {
         LOG.debug("addAddress: {}", newAddress.toString());
         addressService.add(newAddress);
@@ -32,7 +34,7 @@ public class AddressController {
      *
      * @param id идентификатор удаляемого {@link AddressEntity}
      */
-    @DeleteMapping("/addresses/{id}")
+    @DeleteMapping("/{id}")
     void removeAddress(@PathVariable Integer id) {
         LOG.debug("removeAddress: id={}", id);
         addressService.remove(id);

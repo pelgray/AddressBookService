@@ -16,7 +16,7 @@ public class AddressService {
 
     public void add(AddressEntity newAddress) {
         Integer clientId = newAddress.getClient().getId();
-        if (!clientService.existsById(clientId)) {
+        if (!clientService.exists(clientId)) {
             throw new ClientNotFoundException(clientId);
         }
         addressRepository.save(newAddress);

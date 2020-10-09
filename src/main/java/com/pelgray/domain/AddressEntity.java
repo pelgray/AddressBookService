@@ -29,6 +29,10 @@ public class AddressEntity implements Serializable {
         this.client = client;
     }
 
+    public AddressEntity(String name) {
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }

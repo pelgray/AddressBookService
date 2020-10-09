@@ -10,6 +10,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class ServiceRunner {
@@ -20,40 +26,25 @@ public class ServiceRunner {
     }
 
     @Bean
+    @Profile("dev")
     CommandLineRunner initDatabase(ClientRepository clientRepository, AddressRepository addressRepository) {
         return args -> {
             LOG.info("Preloading data");
-            ClientEntity client = clientRepository.save(new ClientEntity("client0"));
-            LOG.info(client.toString());
-            AddressEntity address = addressRepository.save(new AddressEntity("client0_adr0", client));
-            LOG.info(address.toString());
-            address = addressRepository.save(new AddressEntity("client0_adr1", client));
-            LOG.info(address.toString());
-            address = addressRepository.save(new AddressEntity("client0_adr2", client));
-            LOG.info(address.toString());
+            List<String> clientNames = Arrays.asList("client0", "client1", "client2", "client3",
+                    "abc", "abcd", "abcda", "abcdac");
+            List<ClientEntity> clients = clientNames.stream().map(ClientEntity::new).collect(Collectors.toList());
 
-            client = clientRepository.save(new ClientEntity("client1"));
-            LOG.info(client.toString());
-            address = addressRepository.save(new AddressEntity("client1_adr0", client));
-            LOG.info(address.toString());
-            address = addressRepository.save(new AddressEntity("client1_adr1", client));
-            LOG.info(address.toString());
+            List<String> addressNames = Arrays.asList("client0_adr0", "client0_adr1", "client0_adr2");
+            clients.get(0).setAddresses(addressNames.stream().map(AddressEntity::new).collect(Collectors.toList()));
 
-            client = clientRepository.save(new ClientEntity("client2"));
-            LOG.info(client.toString());
-            address = addressRepository.save(new AddressEntity("client2_adr0", client));
-            LOG.info(address.toString());
+            addressNames = Arrays.asList("client1_adr0", "client1_adr1");
+            clients.get(1).setAddresses(addressNames.stream().map(AddressEntity::new).collect(Collectors.toList()));
 
-            LOG.info(clientRepository.save(new ClientEntity("client3")).toString());
-            LOG.info(clientRepository.save(new ClientEntity("abc")).toString());
+            clients.get(2).setAddresses(Collections.singletonList(new AddressEntity("client2_adr0")));
 
-            client = clientRepository.save(new ClientEntity("abcd"));
-            LOG.info(client.toString());
-            address = addressRepository.save(new AddressEntity("abcd_adr0", client));
-            LOG.info(address.toString());
+            clients.get(5).setAddresses(Collections.singletonList(new AddressEntity("abcd_adr0")));
 
-            LOG.info(clientRepository.save(new ClientEntity("abcda")).toString());
-            LOG.info(clientRepository.save(new ClientEntity("abcdac")).toString());
+            clientRepository.saveAll(clients);
             LOG.info("End of preloading data");
         };
     }

@@ -28,23 +28,23 @@ public class ClientService {
         return repository.findBySubstringInName(query);
     }
 
-    public ClientEntity findById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
+    public ClientEntity find(Integer clientId) {
+        return repository.findById(clientId).orElseThrow(() -> new ClientNotFoundException(clientId));
     }
 
-    public boolean existsById(Integer id) {
-        return repository.existsById(id);
+    public boolean exists(Integer clientId) {
+        return repository.existsById(clientId);
     }
 
     public void add(ClientEntity newClient) {
         repository.save(newClient);
     }
 
-    public void remove(Integer id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
+    public void remove(Integer clientId) {
+        if (repository.existsById(clientId)) {
+            repository.deleteById(clientId);
         } else {
-            throw new ClientNotFoundException(id);
+            throw new ClientNotFoundException(clientId);
         }
     }
 }
